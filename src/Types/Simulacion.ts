@@ -91,7 +91,7 @@ export interface RachasTest{
   umbral_utilizado: number; 
   criterio: string; 
   secuencia_binaria: number[]; 
-  derivacion_estandar_R: number;
+  desviacion_estandar_R: number;
 }
 
 export interface SimulacionResults{

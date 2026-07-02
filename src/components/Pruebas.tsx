@@ -6,6 +6,13 @@ interface Pruebas{
 }
 
 export function Pruebas( {resultados}: Pruebas) {
+
+  const dPositivas = resultados.pruebas.K_Smirnov.diferencias_positivas;
+  const dNegativas = resultados.pruebas.K_Smirnov.diferencias_negativas;
+
+  const dMas = Math.max(...dPositivas);
+  const dMenos = Math.max(...dNegativas);
+
   const tablaData = [
     { metodo: "Kolmogorov-Smirnov", ec: resultados.pruebas.K_Smirnov.estadistico_D, vc: resultados.pruebas.K_Smirnov.valor_critico },
     { metodo: "Varianza", ec: resultados.pruebas.Varianza.valor_estadistico, vc: resultados.pruebas.Varianza.valor_critico},
@@ -19,22 +26,22 @@ export function Pruebas( {resultados}: Pruebas) {
        <PruebaCard 
           estado={resultados.pruebas.K_Smirnov.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="K-Smirnov" 
-          FilaDatos={[{ label: "Estadístico D+", valor: resultados.pruebas.K_Smirnov.estadistico_D }]} 
+          FilaDatos={[{ label: "D⁺", valor: dMas }, { label: "D⁻", valor: dMenos }]} 
         />
         <PruebaCard 
           estado={resultados.pruebas.Media.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="Media" 
-          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Media.media_muestral}]} 
+          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Media.valor_critico[0]}, { label: "Lim. Sup", valor: resultados.pruebas.Media.valor_critico[1]}]} 
         />
         <PruebaCard 
           estado={resultados.pruebas.Varianza.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="Varianza" 
-          FilaDatos={[{ label: "Varianza Muestral", valor: resultados.pruebas.Varianza.varianza_muestral }]} 
+          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Varianza.chi2_limite_inferior}, { label: "Lim. Sup", valor: resultados.pruebas.Varianza.chi2_limite_superior}]} 
         />
         <PruebaCard 
           estado={resultados.pruebas.Rachas.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="Rachas" 
-          FilaDatos={[{ label: "Rachas Obs.", valor: resultados.pruebas.Rachas.rachas_observadas }, { label: "Z", valor: resultados.pruebas.Rachas.estadistico_Z }]} 
+          FilaDatos={[{ label: "μ", valor: resultados.pruebas.Rachas.rachas_esperadas}, { label: "c₀", valor: resultados.pruebas.Rachas.rachas_observadas}, { label: "σ²", valor: resultados.pruebas.Rachas.desviacion_estandar_R}]} 
         />
       </div>
 
