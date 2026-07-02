@@ -17,6 +17,7 @@ interface ParametrosProps {
   digitos: string;
   setDigitos: (val: string) => void;
   onEjecutar: (e: MouseEvent<HTMLButtonElement>) => void;
+  loading: boolean;
 }
 
 export const AbstractParams: React.FC<ParametrosProps> = ({
@@ -35,6 +36,7 @@ export const AbstractParams: React.FC<ParametrosProps> = ({
   digitos,
   setDigitos,
   onEjecutar,
+  loading
 }) => {
   return (
     <section
@@ -122,9 +124,10 @@ export const AbstractParams: React.FC<ParametrosProps> = ({
           <div className="flex items-center justify-end mt-8">
             <button
               onClick={onEjecutar}
-              className="relative p-3 font-bold uppercase text-xs tracking-[0.2em] border-2 border-slate-400 border-dashed text-slate-400 transition-all duration-50 ease-out transform origin-center pointer-events-auto sm:hover:not-active:-translate-y-1 sm:hover:not-active:rotate-[-5deg] sm:hover:not-active:scale-130 sm:hover:not-active:border-slate-500 sm:hover:not-active:text-slate-500 sm:hover:not-active:shadow-lg active:scale-110 active:-rotate-5 active:translate-y-1 active:border-emerald-600 active:text-emerald-600 active:bg-emerald-50/50 cursor-pointer select-none outline-none"
+              disabled={loading}
+              className={`relative p-3 font-bold uppercase text-xs tracking-[0.2em] border-2 border-slate-400 border-dashed text-slate-400 transition-all duration-50 ease-out transform origin-center pointer-events-auto ${loading ? 'cursor-not-allowed' : 'sm:hover:not-active:-translate-y-1 sm:hover:not-active:rotate-[-5deg] sm:hover:not-active:scale-130 sm:hover:not-active:border-slate-500 sm:hover:not-active:text-slate-500 sm:hover:not-active:shadow-lg active:scale-110 active:-rotate-5 active:translate-y-1 active:border-emerald-600 active:text-emerald-600 active:bg-emerald-50/50 cursor-pointer select-none outline-none'}`}
             >
-              <span className="relative z-10">Generar</span>
+              <span className="relative z-10 ">{loading ? 'Generando...' : 'Generar'}</span>
             </button>
           </div>
         </div>

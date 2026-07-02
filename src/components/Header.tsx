@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
           </p>
 
           <h1 className="animate-header font-serif text-3xl sm:text-5xl font-black leading-tight mb-8">
-            Laboratorio de Simulación Estocástica
+            Análisis de generadores pseudo-aleatorios y modelos estocásticos
           </h1>
 
           <div className="animate-header flex flex-wrap justify-start sm:justify-center gap-x-8 gap-y-4 font-sans text-xs uppercase font-semibold text-slate-700 mb-8">

@@ -14,10 +14,10 @@ export function Pruebas( {resultados}: Pruebas) {
   const dMenos = Math.max(...dNegativas);
 
   const tablaData = [
-    { metodo: "Kolmogorov-Smirnov", ec: resultados.pruebas.K_Smirnov.estadistico_D, vc: resultados.pruebas.K_Smirnov.valor_critico },
-    { metodo: "Varianza", ec: resultados.pruebas.Varianza.valor_estadistico, vc: resultados.pruebas.Varianza.valor_critico},
-    { metodo: "Rachas (Independencia)", ec: resultados.pruebas.Rachas.estadistico_Z, vc: resultados.pruebas.Rachas.valor_critico_Z },
-    { metodo: "Media", ec: resultados.pruebas.Media.estadistico, vc: resultados.pruebas.Media.valor_critico[1] },
+    { metodo: "Kolmogorov-Smirnov", ec: resultados.pruebas.K_Smirnov.estadistico_D.toFixed(4), vc: resultados.pruebas.K_Smirnov.valor_critico.toFixed(4) },
+    { metodo: "Varianza", ec: resultados.pruebas.Varianza.valor_estadistico.toFixed(4), vc: resultados.pruebas.Varianza.valor_critico[1].toFixed(4) },
+    { metodo: "Rachas (Independencia)", ec: resultados.pruebas.Rachas.estadistico_Z.toFixed(4), vc: resultados.pruebas.Rachas.valor_critico_Z.toFixed(4) },
+    { metodo: "Media", ec: resultados.pruebas.Media.estadistico.toFixed(4), vc: resultados.pruebas.Media.valor_critico[1].toFixed(4) },
   ];
   return (
     <section className='space-y-6'>
@@ -26,22 +26,22 @@ export function Pruebas( {resultados}: Pruebas) {
        <PruebaCard 
           estado={resultados.pruebas.K_Smirnov.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="K-Smirnov" 
-          FilaDatos={[{ label: "D⁺", valor: dMas }, { label: "D⁻", valor: dMenos }]} 
+          FilaDatos={[{ label: "D⁺", valor: dMas.toFixed(4) }, { label: "D⁻", valor: dMenos.toFixed(4) }]} 
         />
         <PruebaCard 
           estado={resultados.pruebas.Media.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="Media" 
-          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Media.valor_critico[0]}, { label: "Lim. Sup", valor: resultados.pruebas.Media.valor_critico[1]}]} 
+          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Media.valor_critico[0].toFixed(4) }, { label: "Lim. Sup", valor: resultados.pruebas.Media.valor_critico[1].toFixed(4) }]} 
         />
         <PruebaCard 
           estado={resultados.pruebas.Varianza.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="Varianza" 
-          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Varianza.chi2_limite_inferior}, { label: "Lim. Sup", valor: resultados.pruebas.Varianza.chi2_limite_superior}]} 
+          FilaDatos={[{ label: "Lim. Inf", valor: resultados.pruebas.Varianza.chi2_limite_inferior.toFixed(4) }, { label: "Lim. Sup", valor: resultados.pruebas.Varianza.chi2_limite_superior.toFixed(4) }]} 
         />
         <PruebaCard 
           estado={resultados.pruebas.Rachas.rechazar_H0 ? "Rechazada" : "Aprobada"} 
           nombre="Rachas" 
-          FilaDatos={[{ label: "μ", valor: resultados.pruebas.Rachas.rachas_esperadas}, { label: "c₀", valor: resultados.pruebas.Rachas.rachas_observadas}, { label: "σ²", valor: resultados.pruebas.Rachas.desviacion_estandar_R}]} 
+          FilaDatos={[{ label: "μ", valor: resultados.pruebas.Rachas.rachas_esperadas.toFixed(4)}, { label: "c₀", valor: resultados.pruebas.Rachas.rachas_observadas.toFixed(4)}, { label: "σ²", valor: resultados.pruebas.Rachas.desviacion_estandar_R.toFixed(4)}]} 
         />
       </div>
 
@@ -62,8 +62,6 @@ export function Pruebas( {resultados}: Pruebas) {
                 <td className="mono" data-kid="95">{f.vc}</td>
               </tr>
             ))}
-
-
           </tbody>
         </table>
       </div>

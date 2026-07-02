@@ -1,14 +1,8 @@
 // Interfaces para el tipado estricto
 export interface FilaMuestra {
   id: string;
-  raw: string;
+  raw: string | number;
   norm: string;
-  entropia: string;
-}
-export interface FilaPrueba {
-  metodo: string;
-  ec: number;
-  vc: number;
 }
 
 interface BaseParams {

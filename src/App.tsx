@@ -43,13 +43,12 @@ export default function App(): React.JSX.Element {
   const [sampleSize, setSampleSize] = useState<string>('1000');
   const [digitos, setDigitos] = useState<string>('4');
 
-  const { resultados, ejecutarSimulacion } = useSimulacion();
+  const { resultados, ejecutarSimulacion, loading } = useSimulacion();
 
   // Estados de datos procesados 
   const [tablaDatos, setTablaDatos] = useState<FilaMuestra[]>([]);
   const [histogramData, setHistogramData] = useState<ChartData<'bar'>>({ labels: [], datasets: [] });
   const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
-  const [simulacionGenerada, setSimulacionGenerada] = useState<boolean>(false);
 
   useEffect(() => {
     if (metodo === 'Medios Cuadrados') {
@@ -103,6 +102,9 @@ export default function App(): React.JSX.Element {
       const normas = resultados.data;
       const n = normas.length;
 
+      const modNum = parseInt(modulo) || 1; 
+      const digNum = parseInt(digitos) || 4;
+
       const conteos = [0, 0, 0, 0, 0];
       normas.forEach((v: number) => {
         if (v < 0.2) conteos[0]++; 
@@ -141,18 +143,26 @@ export default function App(): React.JSX.Element {
         }]
       });
 
-      const nuevasFilas: FilaMuestra[] = normas.map((norm: number, index: number) => ({
-        id: String(index + 1).padStart(4, '0'),
-        raw: "Python API", 
-        norm: norm.toFixed(6),
-        entropia: (0.95 + Math.random() * 0.04).toFixed(4) 
-      }));
+    const nuevasFilas: FilaMuestra[] = resultados.data.map((norm: number, index: number) => {
+      let rawValue = 0;
 
-      setTablaDatos(nuevasFilas);
-      setSimulacionGenerada(true);
-    }
-  }, [resultados]);
-    
+      if (metodo === 'Congruencial Multiplicativo') {
+        rawValue = Math.round(norm * modNum);
+      } else if (metodo === 'Medios Cuadrados') {
+        rawValue = Math.round(norm * Math.pow(10, digNum));
+      }
+
+      return {
+        id: String(index + 1).padStart(4, '0'),
+        raw: rawValue,          
+        norm: norm.toFixed(6), 
+      };
+    });
+
+    setTablaDatos(nuevasFilas);
+  }
+}, [resultados, metodo, modulo, digitos]); 
+
   // Ciclo de vida y animaciones usando gsap.context() para evitar memory leaks
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -198,6 +208,8 @@ export default function App(): React.JSX.Element {
     return () => ctx.revert();
   }, []);
 
+  const simulacionGenerada = resultados !== null && !loading;
+
   return (
     <div className="min-h-screen sm:p-4">
       <div
@@ -221,10 +233,11 @@ export default function App(): React.JSX.Element {
             distribucion={distribucion} setDistribucion={setDistribucion}
             multiplier={multiplier} setMultiplier={setMultiplier} modulo={modulo} setModulo={setModulo}
             sampleSize={sampleSize} setSampleSize={setSampleSize} digitos={digitos} setDigitos={setDigitos}
+            loading={loading}
             onEjecutar={ejecutarProtocolo}
           />
 
-          {simulacionGenerada && resultados && (
+          {simulacionGenerada && (
             <>
               {/* Sección II: Gráficos Reactivos */}
               <GraficosResultados datosHistograma={histogramData} datosLineas={lineData} />
@@ -233,7 +246,7 @@ export default function App(): React.JSX.Element {
               <Pruebas resultados={resultados} />
 
               {/* Sección IV: Tabla Ledger Dinámica */}
-              <TablaLedger mocktabla={tablaDatos} verTodasFilas={false} setVerTodasFilas={() => {}} />
+              <TablaLedger tabla={tablaDatos} verTodasFilas={false} setVerTodasFilas={() => {}} />
 
               {/* Sección V: Conclusión & Firmas de Autorización */}
               <Conclusion totalMuestras={parseInt(sampleSize)} />
